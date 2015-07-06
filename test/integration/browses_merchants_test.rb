@@ -47,5 +47,15 @@ class BrowsesMerchantsTest < ActionDispatch::IntegrationTest
       refute page.has_content?(item_a.name)
     end
   end
+
+  def test_it_views_a_single_item
+    merchant = Merchant.create(name: "Merchant")
+    item_a = Item.create(name: 'new item a', description: "cool item b", merchant_id: merchant.id)
+
+    visit merchant_item_path(merchant, item_a)
+    assert_equal 200, page.status_code
+
+    assert page.has_content?(item_a.name)
+  end
 end
 
