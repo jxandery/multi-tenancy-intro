@@ -26,7 +26,26 @@ class BrowsesMerchantsTest < ActionDispatch::IntegrationTest
       assert page.has_content?(item.description)
       refute page.has_content?(item.merchant_id)
     end
+  end
 
+  def test_only_shows_items_for_given_merchant
+    merchant_a = Merchant.create(name: "Merchant A")
+    item_a = Item.create(name: 'new item a', description: "cool item a", merchant_id: merchant_a.id)
+
+    merchant_b = Merchant.create(name: "Merchant B")
+    item_b = Item.create(name: 'new item b', description: "cool item b", merchant_id: merchant_b.id)
+
+    visit merchant_path(merchant_a)
+    within('li.item') do
+      assert page.has_content?(item_a.name)
+      refute page.has_content?(item_b.name)
+    end
+
+    visit merchant_path(merchant_b)
+    within('li.item') do
+      assert page.has_content?(item_b.name)
+      refute page.has_content?(item_a.name)
+    end
   end
 end
 
