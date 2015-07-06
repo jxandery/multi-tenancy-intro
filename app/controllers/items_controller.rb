@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :load_item, only: [:show]
-  before_action :check_merchant_url
+  before_action :check_merchant_url, only: [:show]
 
   def index
     @items = Item.all
@@ -17,7 +17,7 @@ class ItemsController < ApplicationController
   end
 
   def check_merchant_url
-    if params[:merchant_id] && @item.merchant_id.present? && params[:merchant_id].to_i != @item.merchant_id.to_i
+    if @item.merchant_id && params[:merchant_id].to_i != @item.merchant_id
       redirect_to merchant_item_path(@item.merchant, @item)
     end
   end
