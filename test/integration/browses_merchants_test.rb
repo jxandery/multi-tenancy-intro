@@ -57,5 +57,17 @@ class BrowsesMerchantsTest < ActionDispatch::IntegrationTest
 
     assert page.has_content?(item_a.name)
   end
+
+  def test_it_redirects_incorrect_url_to_correct_merchant_url
+    merchant_a = Merchant.create(name: "Merchant A")
+    item_a = Item.create(name: 'new item a', description: "cool item a", merchant_id: merchant_a.id)
+
+    merchant_b = Merchant.create(name: "Merchant B")
+    item_b = Item.create(name: 'new item b', description: "cool item b", merchant_id: merchant_b.id)
+
+    visit merchant_item_path(merchant_a, item_b)
+
+    assert_equal merchant_item_path(merchant_b, item_b), current_path
+  end
 end
 
