@@ -21,7 +21,7 @@ class BrowsesMerchantsTest < ActionDispatch::IntegrationTest
     item = Item.create(name: 'new item', description: "cool item", merchant_id: merchant.id)
     visit merchant_path(merchant)
 
-    within('li') do
+    within('li.item') do
       assert page.has_content?(item.name)
       assert page.has_content?(item.description)
       refute page.has_content?(item.merchant_id)
